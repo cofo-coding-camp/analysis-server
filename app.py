@@ -28,7 +28,7 @@ def index():
     results = []
     for record in Record.query.all():
         results.append({"id":record.id,"user_name":record.user_name,"commit_message":record.commit_message,"commit_time":record.commit_time.strftime("%Y-%m-%d %H:%M:%S")})
-    return json.dumps(results)
+    return json.dumps(results, indent=4)
 
 
 @app.route("/push",methods=["POST"])
