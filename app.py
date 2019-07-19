@@ -7,6 +7,7 @@ from flask import jsonify
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///records.sqlite3'
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 
 db = SQLAlchemy(app)
 
@@ -28,7 +29,7 @@ def index():
     results = []
     for record in Record.query.all():
         results.append({"id":record.id,"user_name":record.user_name,"commit_message":record.commit_message,"commit_time":record.commit_time.strftime("%Y-%m-%d %H:%M:%S")})
-    return json.dumps(results, indent=4)
+    return json.dumps(results)
 
 
 @app.route("/push",methods=["POST"])
