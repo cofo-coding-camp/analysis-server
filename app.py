@@ -99,7 +99,7 @@ def push():
         if added:
             file_name = added[0]
             r = Record(commit["author"]["name"],message,file_name, datetime.datetime.now())
-        db.session.add(r)
+            db.session.add(r)
     db.session.commit()
     return "OK"
 
