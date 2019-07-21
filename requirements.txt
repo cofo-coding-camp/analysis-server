@@ -2,3 +2,4 @@ flask
 gunicorn
 flask-sqlalchemy
 pymysql
+prettytable
