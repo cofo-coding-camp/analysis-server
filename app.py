@@ -52,18 +52,25 @@ def index():
     if not days.isdigit():
         return "Days should be integer!"
     days = int(days)
+    if days <1:
+        return "Days should be at least 1"
     
     date_base = datetime.datetime.today()
-    date_list = [(date_base - datetime.timedelta(days=x)).strftime("%Y-%m-%d") for x in range(0, days)]
+    date_list = [date_base - datetime.timedelta(days=x) for x in range(0, days)]
     date_list.reverse()
     
     
-    table = PrettyTable(["Name","Total"] + date_list)
+    table = PrettyTable(["Name","Total"] + [date.strftime("%Y-%m-%d") for date in date_list])
     for user in User.query.all():
-        total = Record.query.filter(Record.github_name == user.github_name).filter(Record.commit_time <=date_list[-1]).filter(Record.commit_time>=date_list[0]).count()
+        total = Record.query.filter(Record.github_name == user.github_name)
+        total = total.filter(Record.commit_time <=(date_list[-1]+datetime.timedelta(days=1)).strftime("%Y-%m-%d"))
+        total = total.filter(Record.commit_time >= (date_list[0]-datetime.timedelta(days=1)).strftime("%Y-%m-%d"))
+        total = total.count()
         date_submisson_times = []
         for date in date_list:
-            date_submisson_times.append(Record.query.filter(Record.github_name==user.github_name).filter(cast(Record.commit_time,Date) == date).count())
+            count = Record.query.filter(Record.github_name==user.github_name)
+            count = count.filter(cast(Record.commit_time,Date) == date.strftime("%Y-%m-%d")).count()
+            date_submisson_times.append(count)
         table.add_row([user.wechat_name] + [total] + date_submisson_times)   
     return table.get_html_string()
 
