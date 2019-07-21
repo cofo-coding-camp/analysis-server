@@ -64,7 +64,7 @@ def index():
     for user in User.query.all():
         total = Record.query.filter(Record.github_name == user.github_name)
         total = total.filter(Record.commit_time <=(date_list[-1]+datetime.timedelta(days=1)).strftime("%Y-%m-%d"))
-        total = total.filter(Record.commit_time >= (date_list[0]-datetime.timedelta(days=1)).strftime("%Y-%m-%d"))
+        total = total.filter(Record.commit_time > (date_list[0]).strftime("%Y-%m-%d"))
         total = total.count()
         date_submisson_times = []
         for date in date_list:
