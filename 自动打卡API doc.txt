@@ -1,0 +1,12 @@
+Host URL: https://cofo-analysis-server.herokuapp.com/
+
+1. 获得（n天之内）所有人打卡统计列表 
+    path: / 
+    query: days=<num>  (optional)
+    不加query 默认为7天之内
+
+2. 获得所有人的打卡记录 [GET] 
+    path: /records
+
+3. 连接到你自己的github repo webhook [POST]
+    path: /push 
