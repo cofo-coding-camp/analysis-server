@@ -14,7 +14,7 @@ except ImportError:
     pass
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://b51fa35aa80e09:8c155115@us-cdbr-iron-east-02.cleardb.net/heroku_8862be285234577'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://b51fa35aa80e09:8c155115@us-cdbr-iron-east-02.cleardb.net/heroku_8862be285234577'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 
