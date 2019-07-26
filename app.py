@@ -84,17 +84,20 @@ def records():
 @app.route("/push",methods=["POST"])
 def push():
     data = json.loads(request.data)
-    commits = data["commits"]
+    if "commits" in data:
+        commits = data["commits"]
 
-    for commit in commits:
-        message = commit["message"]
-        added = commit["added"]
-        if added:
-            file_name = added[0]
-            r = Record(commit["author"]["name"],message,file_name, datetime.datetime.now())
-            db.session.add(r)
-    db.session.commit()
-    return "OK"
+        for commit in commits:
+            message = commit["message"]
+            added = commit["added"]
+            if added:
+                file_name = added[0]
+                r = Record(commit["author"]["name"],message,file_name, datetime.datetime.now())
+                db.session.add(r)
+        db.session.commit()
+        return "OK"
+    else:
+        return "NOT RECORDED"
 
 if __name__ == '__main__':
    db.create_all()
