@@ -7,16 +7,9 @@ import json
 from flask import jsonify
 from prettytable import PrettyTable
 
-try:
-    import pymysql
-    pymysql.install_as_MySQLdb()
-except ImportError:
-    pass
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://b51fa35aa80e09:8c155115@us-cdbr-iron-east-02.cleardb.net/heroku_8862be285234577'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://b51fa35aa80e09:8c155115@us-cdbr-iron-east-02.cleardb.net/heroku_8862be285234577'
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
@@ -105,4 +98,4 @@ def push():
 
 if __name__ == '__main__':
    db.create_all()
-   app.run(debug = True)
+   app.run(debug = False)
