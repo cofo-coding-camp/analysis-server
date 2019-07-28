@@ -96,8 +96,9 @@ def push():
     for commit in commits:
         message = commit["message"]
         added = commit["added"]
-        if added:
-            file_name = added[0]
+        
+        for add in added:
+            file_name = add
             r = Record(commit["author"]["name"],message,file_name, datetime.datetime.now())
             db.session.add(r)
     db.session.commit()
