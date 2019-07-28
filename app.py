@@ -7,16 +7,9 @@ import json
 from flask import jsonify
 from prettytable import PrettyTable
 
-try:
-    import pymysql
-    pymysql.install_as_MySQLdb()
-except ImportError:
-    pass
-
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://b51fa35aa80e09:8c155115@us-cdbr-iron-east-02.cleardb.net/heroku_8862be285234577'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://b51fa35aa80e09:8c155115@us-cdbr-iron-east-02.cleardb.net/heroku_8862be285234577'
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 
 db = SQLAlchemy(app)
 
@@ -91,19 +84,21 @@ def records():
 @app.route("/push",methods=["POST"])
 def push():
     data = json.loads(request.data)
-    commits = data["commits"]
+    if "commits" in data:
+        commits = data["commits"]
+        for commit in commits:
+            message = commit["message"]
+            added = commit["added"]
+            if added:
+                file_name = added[0]
+                r = Record(commit["author"]["name"],message,file_name, datetime.datetime.now())
+                db.session.add(r)
+        db.session.commit()
+        return "OK"
+    else:
+        return "NOT RECORDED"
 
-    for commit in commits:
-        message = commit["message"]
-        added = commit["added"]
-        
-        for add in added:
-            file_name = add
-            r = Record(commit["author"]["name"],message,file_name, datetime.datetime.now())
-            db.session.add(r)
-    db.session.commit()
-    return "OK"
 
 if __name__ == '__main__':
    db.create_all()
-   app.run(debug = True)
+   app.run(debug = False)
